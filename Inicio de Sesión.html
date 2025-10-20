@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodePlay | Inicia Sesión o Regístrate</title>
+    <link rel="stylesheet" href="styles-signUp.css" />
+    <link rel="icon" type="image/svg+xml" href="Images/Logo.svg" />
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container" id="container">
+        <!-- Formulario de Registro -->
+        <div class="form-container sign-up-container">
+            <form action="#">
+                <h1>Crear cuenta</h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-google"></i></a>
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-github"></i></a>
+                </div>
+                <span>o usa tu correo electrónico</span>
+                <input type="text" placeholder="Nombre completo" required />
+                <input type="email" placeholder="Correo electrónico" required />
+                <input type="password" placeholder="Contraseña" required />
+                <button id="btnRegistrarme">Registrarme</button>
+            </form>
+        </div>
+
+        <!-- Formulario de Inicio de Sesión -->
+        <div class="form-container sign-in-container">
+            <form action="#">
+                <h1>Iniciar Sesión</h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-google"></i></a>
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-github"></i></a>
+                </div>
+                <span>o usa tu cuenta</span>
+                <input type="email" placeholder="Correo electrónico" required />
+                <input type="password" placeholder="Contraseña" required />
+                <a href="#">¿Olvidaste tu contraseña?</a>
+                <button id="btnIniciarSesion">Entrar</button>
+            </form>
+        </div>
+
+        <!-- Panel de animación -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <img src="Images/Logo.svg" class="logo" alt="CodePlay Logo" />
+                    <h1>¡Bienvenido de nuevo!</h1>
+                    <p>Para seguir aprendiendo con CodePlay, inicia sesión con tus datos.</p>
+                    <button class="ghost" id="signIn">Iniciar sesión</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <img src="Images/Logo.svg" class="logo" alt="CodePlay Logo" />
+                    <h1>¡Hola, Creador!</h1>
+                    <p>Regístrate para empezar tu aventura en el mundo del código y la diversión.</p>
+                    <button class="ghost" id="signUp">Regístrate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector(".sign-up-container form").addEventListener("submit", e => {
+            e.preventDefault();
+            const name = e.target.querySelector("input[placeholder='Nombre completo']").value;
+            const email = e.target.querySelector("input[placeholder='Correo electrónico']").value;
+            const password = e.target.querySelector("input[placeholder='Contraseña']").value;
+
+            if (name && email && password) {
+                window.location.href = "CodePlay.html";
+            } else {
+                alert("Por favor completa todos los campos.");
+            }
+        });
+
+        document.querySelector(".sign-in-container form").addEventListener("submit", e => {
+            e.preventDefault();
+            window.location.href = "CodePlay.html";
+        });
+        // Animaciones de panel (de tu código)
+        const signUpButton = document.getElementById("signUp");
+        const signInButton = document.getElementById("signIn");
+        const container = document.getElementById("container");
+
+        signUpButton.addEventListener("click", () => {
+            container.classList.add("right-panel-active");
+        });
+
+        signInButton.addEventListener("click", () => {
+            container.classList.remove("right-panel-active");
+        });
+    </script>
+
+    </script>
+</body>
+
+</html>

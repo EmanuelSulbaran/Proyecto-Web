@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="CodePlay: aprende programación con juegos, cursos y retos interactivos diseñados para todas las edades.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=BBH+Sans+Bartle&family=Bebas+Neue&family=Fjalla+One&family=Outfit:wght@100..900&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="Images/Logo.svg" />
+    <link rel="preload" href="Images/Logo.svg" as="image">
+    <title>CodePlay</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+</head>
+
+<body>
+
+    <!-- NavBar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="Images/Logo.svg" alt="Logo" />
+                <a href="#inicio" class="logo-text">CodePlay</a>
+            </div>
+
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#juegos">Juegos</a></li>
+                <li><a href="#cursos">Cursos</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+                <li><button class="btn-session" onclick="window.location.href='Inicio de Sesión.html'">Iniciar
+                        Sesión</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <h1 id="codeplay">CodePlay</h1>
+    </section>
+
+    <!-- Presentation -->
+    <section class="nosotros-section">
+        <div class="nosotros-content">
+            <div class="logo-codeplay">
+                <img src="Images/Logo.svg" alt="Logo de CodePlay">
+                <h2>CodePlay</h2>
+            </div>
+            <p>CodePlay es una plataforma interactiva que combina programación, creatividad y entretenimiento, diseñada
+                para que los usuarios aprendan, creen y experimenten con tecnología de forma divertida.
+            </p>
+        </div>
+
+        <div class="nosotros-layout">
+            <!-- Editor estilo VS Code -->
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="dot red"></div>
+                    <div class="dot yellow"></div>
+                    <div class="dot green"></div>
+                    <span class="filename">script.js</span>
+                </div>
+                <pre class="code">
+    <code id="typing-code" class="language-javascript"></code>
+  </pre>
+            </div>
+
+
+            <div class="mario">
+                <iframe src="GAMES/Super Mario Bros.html" style="border:none; overflow:hidden;"
+                    allow="gamepad; fullscreen" tabindex="0"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Games Section -->
+    <section class="games-section" id="juegos">
+        <h2 class="games-title">Nuestros Juegos</h2>
+
+        <div class="games-grid">
+            <a href="#">
+                <article class="game-card">
+                    <img src="Images/Carreras 3D.jpeg" alt="Code Runner" class="game-img">
+                    <div class="game-info">
+                        <span class="game-meta">CodePlay • Octubre 18, 2025</span>
+                        <h3>WebRush 3D</h3>
+                        <p>Corre, esquiva y aprende lógica de programación mientras avanzas por líneas de código vivas.
+                        </p>
+                    </div>
+                </article>
+            </a>
+
+            <a href="#">
+                <article class="game-card">
+                    <img src="Images/Adivina el color.jpeg" alt="Logic Quest" class="game-img">
+                    <div class="game-info">
+                        <span class="game-meta">CodePlay • Octubre 18, 2025</span>
+                        <h3>RGB-Lution</h3>
+                        <p>Resuelve acertijos y desbloquea niveles usando estructuras condicionales y bucles.</p>
+                    </div>
+                </article>
+            </a>
+
+            <a href="#">
+                <article class="game-card">
+                    <img src="Images/Rompe Bloques.jpeg" alt="Syntax Wars" class="game-img">
+                    <div class="game-info">
+                        <span class="game-meta">CodePlay • Octubre 18, 2025</span>
+                        <h3>Blockbusters</h3>
+                        <p>Defiende tu terminal del caos del código erróneo y mejora tus reflejos de sintaxis.</p>
+                    </div>
+                </article>
+            </a>
+
+            <a href="#">
+                <article class="game-card">
+                    <img src="Images/Rompe Bloques.jpeg" alt="Syntax Wars" class="game-img">
+                    <div class="game-info">
+                        <span class="game-meta">CodePlay • Octubre 18, 2025</span>
+                        <h3>Fast Car</h3>
+                        <p>Defiende tu terminal del caos del código erróneo y mejora tus reflejos de sintaxis.</p>
+                    </div>
+                </article>
+            </a>
+
+            <a href="#">
+                <article class="game-card">
+                    <img src="Images/Rompe Bloques.jpeg" alt="Syntax Wars" class="game-img">
+                    <div class="game-info">
+                        <span class="game-meta">CodePlay • Octubre 18, 2025</span>
+                        <h3>Esquiva</h3>
+                        <p>Defiende tu terminal del caos del código erróneo y mejora tus reflejos de sintaxis.</p>
+                    </div>
+                </article>
+            </a>
+
+            <a href="#">
+                <article class="game-card">
+                    <img src="Images/Rompe Bloques.jpeg" alt="Syntax Wars" class="game-img">
+                    <div class="game-info">
+                        <span class="game-meta">CodePlay • Octubre 18, 2025</span>
+                        <h3>Culebrita</h3>
+                        <p>Defiende tu terminal del caos del código erróneo y mejora tus reflejos de sintaxis.</p>
+                    </div>
+                </article>
+            </a>
+        </div>
+    </section>
+
+
+
+
+    <!-- Courses Section -->
+    <!-- ==================== SECCIÓN CURSOS ==================== -->
+    <section class="courses-section" id="cursos">
+        <h2 class="courses-title typewriter"></h2>
+
+        <div class="courses-grid">
+
+            <!-- Curso HTML -->
+            <article class="course-card">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 452 520">
+                    <path fill="#e34f26" d="M41 460L0 0h451l-41 460-185 52" />
+                    <path fill="#ef652a" d="M226 472l149-41 35-394H226" />
+                    <path fill="#ecedee"
+                        d="M226 208h-75l-5-58h80V94H84l15 171h127zm0 147l-64-17-4-45h-56l7 89 117 32z" />
+                    <path fill="#fff" d="M226 265h69l-7 73-62 17v59l115-32 16-174H226zm0-171v56h136l5-56z" />
+                </svg>
+            </article>
+
+            <!-- Curso CSS -->
+            <article class="course-card">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 452 520">
+                    <path fill="#0c73b8" d="M41 460L0 0h451l-41 460-185 52" />
+                    <path fill="#30a9dc" d="M226 472l149-41 35-394H226" />
+                    <path fill="#ecedee" d="M226 208H94l5 57h127zm0-114H84l5 56h137zm0 261l-124-33 7 60 117 32z" />
+                    <path fill="#fff" d="M226 265h69l-7 73-62 17v59l115-32 26-288H226v56h80l-6 58h-74z" />
+                </svg>
+            </article>
+
+            <!-- Curso JavaScript -->
+            <article class="course-card">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 630 630">
+                    <rect width="630" height="630" fill="#f7df1e" />
+                    <path
+                        d="m423.2 492.19c12.69 20.72 29.2 35.95 58.4 35.95 24.53 0 40.2-12.26 40.2-29.2 0-20.3-16.1-27.49-43.1-39.3l-14.8-6.35c-42.72-18.2-71.1-41-71.1-89.2 0-44.4 33.83-78.2 86.7-78.2 37.64 0 64.7 13.1 84.2 47.4l-46.1 29.6c-10.15-18.2-21.1-25.37-38.1-25.37-17.34 0-28.33 11-28.33 25.37 0 17.76 11 24.95 36.4 35.95l14.8 6.34c50.3 21.57 78.7 43.56 78.7 93 0 53.3-41.87 82.5-98.1 82.5-54.98 0-90.5-26.2-107.88-60.54zm-209.13 5.13c9.3 16.5 17.76 30.45 38.1 30.45 19.45 0 31.72-7.61 31.72-37.2v-201.3h59.2v202.1c0 61.3-35.94 89.2-88.4 89.2-47.4 0-74.85-24.53-88.81-54.075z" />
+                </svg>
+            </article>
+        </div>
+    </section>
+
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contacto">
+        <div class="contact-content">
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Sección 1: Branding -->
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <img src="Images/Logo.svg" alt="Logo CodePlay">
+                    <h3>CodePlay</h3>
+                </div>
+                <p class="footer-description">
+                    Aprende programación de forma divertida con nuestros juegos interactivos y cursos diseñados para
+                    todos
+                    los niveles.
+                </p>
+                <div class="social-links">
+                    <a href="#" aria-label="Twitter" class="social-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2s9 5 20 5a9.5 9.5 0 00-9-5.5c4.75 2.25 9-1 9-5.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                            </path>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Discord" class="social-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.211.375-.445.865-.607 1.252a18.27 18.27 0 00-5.487 0c-.163-.387-.399-.877-.607-1.252a.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.042-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.294.075.075 0 01.078-.01c3.928 1.793 8.18 1.793 12.062 0a.075.075 0 01.079.009c.12.094.246.195.372.294a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.076.076 0 00-.041.107c.352.699.764 1.364 1.225 1.994a.077.077 0 00.084.028 19.963 19.963 0 006.002-3.03.077.077 0 00.032-.057c.5-4.788-.838-8.895-3.549-12.562a.06.06 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-.965-2.157-2.156 0-1.193.948-2.157 2.157-2.157 1.211 0 2.176.964 2.157 2.157 0 1.19-.946 2.157-2.157 2.157zm7.975 0c-1.183 0-2.157-.965-2.157-2.156 0-1.193.948-2.157 2.157-2.157 1.211 0 2.176.964 2.157 2.157 0 1.19-.946 2.157-2.157 2.157z">
+                            </path>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="GitHub" class="social-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v 3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z">
+                            </path>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="YouTube" class="social-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z">
+                            </path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Sección 2: Navegación -->
+            <div class="footer-section">
+                <h4>Navegación</h4>
+                <ul class="footer-links">
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#juegos">Juegos</a></li>
+                    <li><a href="#cursos">Cursos</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+
+            <!-- Sección 3: Recursos -->
+            <div class="footer-section">
+                <h4>Recursos</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Documentación</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Comunidad</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+
+            <!-- Sección 4: Legal -->
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Privacidad</a></li>
+                    <li><a href="#">Términos de Servicio</a></li>
+                    <li><a href="#">Cookies</a></li>
+                    <li><a href="#">Licencias</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="footer-divider"></div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <p>&copy; 2025 CodePlay. Todos los derechos reservados.</p>
+            <p>Diseñado con <span class="heart">❤️</span> para apasionados del código</p>
+        </div>
+    </footer>
+
+    <script src="animations/sections.js"></script>
+    <script src="animations/navbar.js"></script>
+    <script src="animations/letter.js"></script>
+    <!-- PrismJS para resaltado automático -->
+    <link rel="stylesheet" href="stylePrism.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+
+    <script>
+        const codeEl = document.getElementById("typing-code");
+
+        const codeText = `const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const GRAVITY = 0.6, JUMP_POWER = 12;
+
+let game = { score: 0, coins: 0, lives: 3, over: false, cameraX: 0 };
+let mario = { x: 50, y: 350, w: 20, h: 32, vy: 0, dir: 1, jump: false };
+let enemies = [], coins = [], platforms = [], flag = {};
+
+function generateLevel() {
+  platforms = [
+    { x: 0, y: 450, w: 1000, h: 50 },
+    { x: 450, y: 320, w: 150, h: 20 },
+    { x: 800, y: 380, w: 150, h: 20 }
+  ];
+  coins = [
+    { x: 470, y: 280 }, { x: 520, y: 280 },
+    { x: 720, y: 340 }, { x: 760, y: 340 }
+  ];
+  enemies = [
+    { x: 500, y: 350, w: 30, h: 25, dir: -1, speed: 2 },
+    { x: 800, y: 410, w: 30, h: 25, dir: 1, speed: 2 }
+  ];
+  flag = { x: 1000, y: 380 };
+}
+
+function update() {
+  if (game.over) return;
+  mario.vy += GRAVITY;
+  mario.y += mario.vy;
+
+  for (let p of platforms) {
+    if (mario.y + mario.h >= p.y && mario.y + mario.h <= p.y + 10 &&
+        mario.x + mario.w > p.x && mario.x < p.x + p.w) {
+      mario.vy = 0;
+      mario.y = p.y - mario.h;
+      mario.jump = false;
+    }
+  }
+
+  for (let c of coins)
+    if (Math.hypot(c.x - mario.x, c.y - mario.y) < 30) {
+      game.coins++;
+      coins = coins.filter(v => v !== c);
+    }
+
+  if (Math.hypot(flag.x - mario.x, flag.y - mario.y) < 40)
+    game.over = true;
+}
+
+function draw() {
+  ctx.fillStyle = '#87CEEB';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#ff0000';
+  ctx.fillRect(mario.x, mario.y, mario.w, mario.h);
+}
+
+function loop() {
+  update(); draw();
+  requestAnimationFrame(loop);
+}
+
+generateLevel();
+loop();`;
+
+        let index = 0;
+        let isDeleting = false;
+
+        function typeCode() {
+            const speed = isDeleting ? 20 : 40; // más lento y natural
+            const pause = isDeleting ? 1000 : 2000;
+
+            if (!isDeleting) {
+                codeEl.textContent = codeText.slice(0, index++);
+                codeEl.innerHTML = Prism.highlight(codeEl.textContent, Prism.languages.javascript, 'javascript');
+
+                if (index === codeText.length) {
+                    isDeleting = true;
+                    setTimeout(typeCode, pause);
+                    return;
+                }
+            } else {
+                codeEl.textContent = codeText.slice(0, index--);
+                codeEl.innerHTML = Prism.highlight(codeEl.textContent, Prism.languages.javascript, 'javascript');
+                if (index === 0) {
+                    isDeleting = false;
+                    setTimeout(typeCode, pause);
+                    return;
+                }
+            }
+            setTimeout(typeCode, speed + Math.random() * 40); // animación más humana
+        }
+
+        typeCode();
+
+    </script>
+
+
+</body>
+
+</html>

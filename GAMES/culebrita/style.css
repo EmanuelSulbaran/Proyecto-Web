@@ -1,0 +1,67 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: #4b4c4d;
+}
+
+.wrapper {
+    width: 65vmin;
+    height: 70vmin;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    border-radius: 15px;
+    background: #f8f8f834;
+}
+
+/*background: #293447;*/
+
+.game-details {
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 20px 27px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.play-board {
+    width: 100%;
+    height: 100%;
+    background: #0fb338a4;
+    display: grid;
+    grid-template: repeat(30, 1fr) / repeat(30, 1fr);
+}
+
+.play-board .food {
+    background-image: url("img/manzana.png");
+    background-size: cover;
+    background-position: center;
+}
+
+
+.play-board .head {
+    background: #0d2bd6c9;
+    background-image: url("img/serpiente.png");
+    background-size: cover;
+    background-position: center;
+    border-radius: 3px;
+}
+
+canvas {
+    background: #222;
+}
+
+.snake-part {
+  width: 100%;
+  height: 100%;
+}

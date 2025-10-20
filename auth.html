@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Iniciar Sesión con Google - CodePlay</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+  <h2>Iniciar sesión con Google</h2>
+
+  <!-- Inicialización automática -->
+  <div id="g_id_onload"
+      data-client_id="TU_CLIENT_ID_DE_GOOGLE"
+      data-callback="handleCredentialResponse"
+      data-auto_prompt="false">
+  </div>
+
+  <!-- Botón de Google -->
+  <div class="g_id_signin"
+      data-type="standard"
+      data-size="large"
+      data-theme="outline"
+      data-text="sign_in_with"
+      data-shape="rectangular"
+      data-logo_alignment="left">
+  </div>
+
+  <script>
+    function handleCredentialResponse(response) {
+      console.log("Token JWT de Google:", response.credential);
+      // Aquí envías el token a tu backend para verificarlo
+      // Ejemplo:
+      // fetch('/auth/google', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ token: response.credential })
+      // });
+    }
+  </script>
+</body>
+</html>

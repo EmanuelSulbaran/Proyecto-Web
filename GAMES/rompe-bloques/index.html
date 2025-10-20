@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rompe Bloques</title>
+  <style>
+    canvas {
+      background: white;
+      margin: 3% 0 0 10%;
+      width: 80%;
+      position: relative;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #0f9d58;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="miCanvas" width="480" height="320"></canvas>
+
+  <script>
+    const canvas = document.getElementById("miCanvas");
+    canvas.setAttribute("tabindex", "0");
+    canvas.focus();
+
+    const ctx = canvas.getContext("2d");
+
+    // posicion de la pelota y su tamaño y la velocidad
+    let x = canvas.width / 2;
+    let y = canvas.height - 30;
+    let dx = 2;
+    let dy = -2;
+    const ballRadius = 7;
+    // posicion de barra de jugador 
+    const paddleHeight = 10;
+    const paddleWidth = 75;
+    let paddleX = (canvas.width - paddleWidth) / 2;
+
+    let rightPressed = false;
+    let leftPressed = false;
+
+    // Bloques
+    const brickRowCount = 3;
+    const brickColumnCount = 5;
+    const brickWidth = 75;
+    const brickHeight = 20;
+    const brickPadding = 10;
+    const brickOffsetTop = 30;
+    const brickOffsetLeft = 30;
+
+    let score = 0;
+    let gamePaused = false;
+
+    const bricks = [];
+    for (let c = 0; c < brickColumnCount; c++) {
+      bricks[c] = [];
+      for (let r = 0; r < brickRowCount; r++) {
+        bricks[c][r] = { x: 0, y: 0, status: 1 };
+      }
+    }
+
+    // Controles del teclado
+    document.addEventListener("keydown", keyDownHandler);
+    document.addEventListener("keyup", keyUpHandler);
+
+    function keyDownHandler(e) {
+      if (e.key === "Right" || e.key === "ArrowRight") rightPressed = true;
+      else if (e.key === "Left" || e.key === "ArrowLeft") leftPressed = true;
+    }
+    function keyUpHandler(e) {
+      if (e.key === "Right" || e.key === "ArrowRight") rightPressed = false;
+      else if (e.key === "Left" || e.key === "ArrowLeft") leftPressed = false;
+    }
+
+
+
+    // Detección de colisiones
+    function collisionDetection() {
+      for (let c = 0; c < brickColumnCount; c++) {
+        for (let r = 0; r < brickRowCount; r++) {
+          const b = bricks[c][r];
+          if (b.status === 1) {
+            if (
+              x > b.x &&
+              x < b.x + brickWidth &&
+              y > b.y &&
+              y < b.y + brickHeight
+            ) {
+              dy = -dy;
+              b.status = 0;
+              score++;
+              if (score === brickRowCount * brickColumnCount) {
+                mostrarMenu(" ¡Ganaste!");
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Dibuja la pelota
+    function drawBall() {
+      ctx.beginPath();
+      ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+      ctx.fillStyle = "#0095DD";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    // Dibuja la barra
+    function drawPaddle() {
+      ctx.beginPath();
+      ctx.rect(paddleX, canvas.height - paddleHeight - 10, paddleWidth, paddleHeight);
+      ctx.fillStyle = "#0f9d58";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    // Dibuja los bloques
+    function drawBricks() {
+      for (let c = 0; c < brickColumnCount; c++) {
+        for (let r = 0; r < brickRowCount; r++) {
+          if (bricks[c][r].status === 1) {
+            const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+            const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+            bricks[c][r].x = brickX;
+            bricks[c][r].y = brickY;
+
+            const grad = ctx.createLinearGradient(brickX, brickY, brickX, brickY + brickHeight);
+            grad.addColorStop(0, "#0f9d58");
+            grad.addColorStop(1, "#34a853");
+
+            ctx.fillStyle = grad;
+            ctx.fillRect(brickX, brickY, brickWidth, brickHeight);
+          }
+        }
+      }
+    }
+
+
+    // Dibuja el puntaje
+    function drawScore() {
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "#333";
+      ctx.fillText("Puntaje: " + score, 8, 20);
+    }
+
+    // MENÚ (evita crear varios menús si ya existe uno)
+    function mostrarMenu(mensaje) {
+      if (document.getElementById("menu-juego")) return; // si ya está, salir
+      gamePaused = true;
+
+      const menu = document.createElement("div");
+      menu.id = "menu-juego";
+      menu.style.position = "absolute";
+      menu.style.top = "50%";
+      menu.style.left = "50%";
+      menu.style.transform = "translate(-50%, -50%)";
+      menu.style.background = "#ffffff";
+      menu.style.padding = "20px 40px";
+      menu.style.border = "3px solid #0095DD";
+      menu.style.borderRadius = "10px";
+      menu.style.textAlign = "center";
+      menu.style.boxShadow = "0 0 20px rgba(0,0,0,0.3)";
+      menu.innerHTML = `
+    <h2>${mensaje}</h2>
+    <button id="reintentar">🔁 Volver a intentar</button>
+  `;
+      document.body.appendChild(menu);
+
+      // Botón volver a intentar
+      document.getElementById("reintentar").onclick = () => {
+        document.location.reload();
+      };
+    }
+
+    // Dibuja y actualiza el juego
+    function draw() {
+      if (gamePaused) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBricks();
+      drawBall();
+      drawPaddle();
+      drawScore();
+      collisionDetection();
+      // Rebote lateral
+      if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) dx = -dx;
+
+      // Rebote superior
+      if (y + dy < ballRadius) {
+        dy = -dy;
+      }
+
+      // Rebote con la paleta
+      if (
+        y + dy > canvas.height - ballRadius - paddleHeight - 10 &&
+        x > paddleX &&
+        x < paddleX + paddleWidth
+      ) {
+        y = canvas.height - paddleHeight - 10 - ballRadius;
+        dy = -Math.abs(dy);
+        const hitPoint = x - (paddleX + paddleWidth / 2);
+        dx = hitPoint * 0.12;
+      }
+
+      // 💥 Si la pelota cae más abajo del canvas → perder
+      if (y + dy > canvas.height - ballRadius) {
+        mostrarMenu("¡Perdiste!");
+        return;
+      }
+
+
+      // Movimiento de la barra
+      if (rightPressed && paddleX < canvas.width - paddleWidth) paddleX += 5;
+      else if (leftPressed && paddleX > 0) paddleX -= 5;
+
+      // Movimiento de la pelota
+      x += dx;
+      y += dy;
+
+      requestAnimationFrame(draw);
+    }
+
+    draw();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>car speed</title>
+  <link rel="stylesheet" href="estylos.css" />
+</head>
+
+<body>
+  <canvas id="juego"></canvas>
+
+  <script>
+    const canvas = document.getElementById("juego");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.setAttribute("tabindex", "0");
+    canvas.focus();
+
+
+
+    const carro = {
+      x: canvas.width / 2 - 60,
+      y: canvas.height - 200,
+      width: 120,
+      height: 240,
+      velocidad: 8,
+      imagen: new Image()
+    };
+
+    carro.imagen.src = "img/carro.png";
+
+
+    const enemigos = [];
+    const imagenesEnemigos = [
+      "img/enemigo1.png",
+      "img/enemigo2.png",
+      "img/enemigo3.png",
+      "img/enemigo4.png",
+    ];
+
+    function crearEnemigo() {
+      const ancho = 120;
+      const alto = 200;
+      const x = Math.random() * (canvas.width * 0.5 - ancho) + canvas.width * 0.25;
+
+
+      const ruta = imagenesEnemigos[Math.floor(Math.random() * imagenesEnemigos.length)];
+      const imagen = new Image();
+      imagen.src = ruta;
+
+      enemigos.push({
+        x,
+        y: -alto,
+        width: ancho,
+        height: alto,
+        velocidad: 6,
+        imagen
+      });
+    }
+
+
+
+
+    let lineas = [];
+    for (let i = 0; i < 20; i++) {
+      lineas.push({ x: canvas.width / 2 - 5, y: i * 120 });
+    }
+
+    function dibujarCarretera() {
+
+      ctx.fillStyle = "#222";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+
+      ctx.fillStyle = "#444";
+      ctx.fillRect(canvas.width * 0.25, 0, canvas.width * 0.5, canvas.height);
+
+
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(canvas.width * 0.25 - 10, 0, 5, canvas.height);
+      ctx.fillRect(canvas.width * 0.75 + 5, 0, 5, canvas.height);
+
+
+      ctx.fillStyle = "#ffff00";
+      lineas.forEach(l => {
+        ctx.fillRect(l.x, l.y, 8, 100);
+        l.y += 12;
+        if (l.y > canvas.height) l.y = -120;
+      });
+    }
+
+
+    function dibujarCarro(c) {
+      if (c.imagen && c.imagen.complete && c.imagen.naturalWidth !== 0) {
+        ctx.drawImage(c.imagen, c.x, c.y, c.width, c.height);
+      } else {
+        ctx.fillStyle = c.color || "#00ff44";
+        ctx.fillRect(c.x, c.y, c.width, c.height);
+      }
+    }
+
+
+
+    const teclas = {};
+    window.addEventListener("keydown", e => {
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+        e.preventDefault();
+      }
+      teclas[e.key] = true;
+    });
+
+    window.addEventListener("keyup", e => {
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+        e.preventDefault();
+      }
+      teclas[e.key] = false;
+    });
+
+
+    function moverCarro() {
+      if (teclas["ArrowLeft"] && carro.x > canvas.width * 0.25)
+        carro.x -= carro.velocidad;
+      if (teclas["ArrowRight"] && carro.x + carro.width < canvas.width * 0.75)
+        carro.x += carro.velocidad;
+      if (teclas["ArrowUp"] && carro.y > 0)
+        carro.y -= carro.velocidad;
+      if (teclas["ArrowDown"] && carro.y + carro.height < canvas.height)
+        carro.y += carro.velocidad;
+    }
+
+    function colision(a, b) {
+      const margen = 38;
+      return (
+        a.x + margen < b.x + b.width - margen &&
+        a.x + a.width - margen > b.x + margen &&
+        a.y + margen < b.y + b.height - margen &&
+        a.y + a.height - margen > b.y + margen
+      );
+    }
+
+
+    let frame = 0;
+    let juegoActivo = true;
+
+    function loop() {
+      if (!juegoActivo) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      dibujarCarretera();
+      moverCarro();
+      dibujarCarro(carro);
+
+
+      frame++;
+      if (frame % 70 === 0) crearEnemigo();
+
+
+      enemigos.forEach((e, i) => {
+        e.y += e.velocidad;
+        ctx.drawImage(e.imagen, e.x, e.y, e.width, e.height);
+
+        if (e.y > canvas.height) enemigos.splice(i, 1);
+
+        if (colision(carro, e)) {
+          juegoActivo = false;
+          alert("¡Perdiste!");
+          location.reload();
+        }
+      });
+      requestAnimationFrame(loop);
+    }
+    loop();
+  </script>
+</body>
+
+</html>

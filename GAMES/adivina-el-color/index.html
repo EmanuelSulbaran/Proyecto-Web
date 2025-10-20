@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adivina el Color</title>
+    <link rel="stylesheet" href="stylos.css" />
+</head>
+<body>
+    <div class="container">
+        <h1>Adivina el Color 🎨</h1>
+        <p class="rgb-text" id="rgbText">rgb(?, ?, ?)</p>
+
+        <div class="color-options">
+            <div class="color-box" id="box1"></div>
+            <div class="color-box" id="box2"></div>
+            <div class="color-box" id="box3"></div>
+        </div>
+
+        <p id="result"></p>
+        <p id="scoreText">Puntuación: 0</p>
+        <button id="newGame">Nuevo color</button>
+    </div>
+
+    
+    <div id="gameOverModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Game Over 😵</h2>
+            <p>¡Perdiste! ¿Quieres intentarlo de nuevo?</p>
+            <button id="restartBtn">Reiniciar Juego</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

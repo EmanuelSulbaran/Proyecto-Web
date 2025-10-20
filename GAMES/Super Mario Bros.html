@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Mario Bros</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #333;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        canvas {
+            border: 4px solid #333;
+            background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 50%, #90EE90 50%, #90EE90 100%);
+            display: block;
+            image-rendering: pixelated;
+        }
+
+        .info {
+            color: #fff;
+            margin-top: 15px;
+            font-size: 1.1em;
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .instructions {
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 15px;
+            font-size: 0.95em;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 1em;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background: #ff5252;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <canvas id="gameCanvas" width="1000" height="500"></canvas>
+        <div class="info">
+            <div class="info-item">Puntuación: <span id="score">0</span></div>
+            <div class="info-item">Monedas: <span id="coins">0</span></div>
+            <div class="info-item">Vidas: <span id="lives">3</span></div>
+            <div class="info-item">Nivel: <span id="level">1</span></div>
+        </div>
+        <div class="instructions">
+            A/D o Flechas para mover | ESPACIO para saltar | Recoge monedas, evita enemigos y llega a la bandera
+        </div>
+        <button id="resetBtn">Nuevo Juego</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        canvas.setAttribute("tabindex", "0");
+        canvas.focus();
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score');
+        const coinsDisplay = document.getElementById('coins');
+        const livesDisplay = document.getElementById('lives');
+        const levelDisplay = document.getElementById('level');
+        const resetBtn = document.getElementById('resetBtn');
+
+        const GRAVITY = 0.6;
+        const JUMP_POWER = 12;
+
+        let gameState = {
+            score: 0,
+            coins: 0,
+            lives: 3,
+            gameOver: false,
+            levelComplete: false,
+            level: 1,
+            cameraX: 0
+        };
+
+        let mario = {
+            x: 50,
+            y: 350,
+            width: 20,
+            height: 32,
+            velocityY: 0,
+            velocityX: 0,
+            jumping: false,
+            direction: 1,
+            color: '#ff0000'
+        };
+
+        let enemies = [];
+        let coins = [];
+        let platforms = [];
+        let flag = { x: 0, y: 0 };
+
+        function generateLevel(levelNum) {
+            platforms = [
+                { x: 0, y: 450, width: 1000, height: 50 }, // Suelo
+                { x: 200, y: 380, width: 150, height: 20 },
+                { x: 450, y: 320, width: 150, height: 20 },
+                { x: 700, y: 380, width: 150, height: 20 },
+                { x: 1000, y: 350, width: 150, height: 20 },
+                { x: 1300, y: 300, width: 200, height: 20 },
+                { x: 1650, y: 350, width: 150, height: 20 },
+                { x: 1900, y: 250, width: 300, height: 20 },
+                { x: 2350, y: 350, width: 150, height: 20 },
+                { x: 2600, y: 320, width: 150, height: 20 },
+                { x: 2900, y: 380, width: 200, height: 20 },
+                { x: 3200, y: 450, width: 1000, height: 50 }
+            ];
+
+            coins = [
+                { x: 220, y: 340 }, { x: 260, y: 340 },
+                { x: 470, y: 280 }, { x: 520, y: 280 },
+                { x: 720, y: 340 }, { x: 760, y: 340 },
+                { x: 1050, y: 310 }, { x: 1100, y: 310 },
+                { x: 1350, y: 260 }, { x: 1420, y: 260 },
+                { x: 1700, y: 310 }, { x: 1750, y: 310 },
+                { x: 1950, y: 210 }, { x: 2050, y: 210 }, { x: 2150, y: 210 },
+                { x: 2400, y: 310 }, { x: 2450, y: 310 },
+                { x: 2650, y: 280 }, { x: 2700, y: 280 },
+                { x: 2950, y: 340 }, { x: 3050, y: 340 }
+            ];
+
+            enemies = [
+                { x: 300, y: 410, width: 30, height: 25, direction: 1, speed: 2, type: 'goomba' },
+                { x: 500, y: 350, width: 30, height: 25, direction: -1, speed: 2.5, type: 'goomba' },
+                { x: 800, y: 410, width: 30, height: 25, direction: 1, speed: 2, type: 'goomba' },
+                { x: 1150, y: 310, width: 30, height: 25, direction: -1, speed: 3, type: 'goomba' },
+                { x: 1550, y: 410, width: 30, height: 25, direction: 1, speed: 2, type: 'goomba' },
+                { x: 2000, y: 210, width: 25, height: 35, direction: 1, speed: 1.5, type: 'koopa' },
+                { x: 2200, y: 210, width: 25, height: 35, direction: -1, speed: 1.5, type: 'koopa' },
+                { x: 2500, y: 350, width: 30, height: 25, direction: 1, speed: 2.5, type: 'goomba' },
+                { x: 2750, y: 320, width: 30, height: 25, direction: -1, speed: 2.5, type: 'goomba' },
+                { x: 3050, y: 410, width: 30, height: 25, direction: 1, speed: 2, type: 'goomba' }
+            ];
+
+            flag = { x: 3300, y: 380 };
+        }
+
+        let keys = {};
+
+        function update() {
+            if (gameState.gameOver || gameState.levelComplete) return;
+
+            // Control de Mario
+            mario.velocityX = 0;
+            if (keys['a'] || keys['ArrowLeft']) {
+                mario.velocityX = -5;
+                mario.direction = -1;
+            }
+            if (keys['d'] || keys['ArrowRight']) {
+                mario.velocityX = 5;
+                mario.direction = 1;
+            }
+
+            if ((keys[' '] || keys['w'] || keys['ArrowUp']) && mario.jumping === false) {
+                mario.velocityY = -JUMP_POWER;
+                mario.jumping = true;
+            }
+
+            // Aplicar gravedad
+            mario.velocityY += GRAVITY;
+            mario.y += mario.velocityY;
+            mario.x += mario.velocityX;
+
+            // Límites horizontales del nivel
+            if (mario.x < 0) mario.x = 0;
+
+            // Colisión con plataformas
+            mario.jumping = true;
+            for (let platform of platforms) {
+                if (mario.velocityY > 0 &&
+                    mario.y + mario.height >= platform.y &&
+                    mario.y + mario.height <= platform.y + platform.height + 10 &&
+                    mario.x + mario.width > platform.x &&
+                    mario.x < platform.x + platform.width) {
+                    mario.velocityY = 0;
+                    mario.y = platform.y - mario.height;
+                    mario.jumping = false;
+                }
+            }
+
+            // Caída del mundo
+            if (mario.y > canvas.height) {
+                loseLive();
+                return;
+            }
+
+            // Recolectar monedas
+            coins = coins.filter(coin => {
+                const dist = Math.hypot(coin.x - mario.x, coin.y - mario.y);
+                if (dist < 30) {
+                    gameState.coins++;
+                    gameState.score += 100;
+                    coinsDisplay.textContent = gameState.coins;
+                    scoreDisplay.textContent = gameState.score;
+                    return false;
+                }
+                return true;
+            });
+
+            // Verificar bandera de meta
+            const distFlag = Math.hypot(flag.x - mario.x, flag.y - mario.y);
+            if (distFlag < 40) {
+                levelComplete();
+            }
+
+            // Movimiento y colisión de enemigos
+            for (let enemy of enemies) {
+                enemy.x += enemy.speed * enemy.direction;
+
+                // Rebotar en límites
+                if (enemy.x < 0 || enemy.x > 3400) {
+                    enemy.direction *= -1;
+                }
+
+                // Colisión con Mario
+                if (mario.x < enemy.x + enemy.width &&
+                    mario.x + mario.width > enemy.x &&
+                    mario.y < enemy.y + enemy.height &&
+                    mario.y + mario.height > enemy.y) {
+
+                    // Puede ser pisado si cae desde arriba
+                    if (mario.velocityY > 0 && mario.y + mario.height - mario.velocityY <= enemy.y + 10) {
+                        enemy.dead = true;
+                        mario.velocityY = -8;
+                        gameState.score += 200;
+                        scoreDisplay.textContent = gameState.score;
+                    } else {
+                        loseLive();
+                        return;
+                    }
+                }
+            }
+
+            enemies = enemies.filter(e => !e.dead);
+
+            // Actualizar cámara para seguir a Mario
+            gameState.cameraX = Math.max(0, mario.x - 200);
+        }
+
+        function loseLive() {
+            gameState.lives--;
+            livesDisplay.textContent = gameState.lives;
+
+            if (gameState.lives <= 0) {
+                gameState.gameOver = true;
+            } else {
+                mario.x = 50;
+                mario.y = 350;
+                mario.velocityY = 0;
+                gameState.cameraX = 0;
+            }
+        }
+
+        function levelComplete() {
+            gameState.levelComplete = true;
+            gameState.score += 1000;
+            scoreDisplay.textContent = gameState.score;
+        }
+
+        function draw() {
+            // Sky and grass
+            ctx.fillStyle = '#87CEEB';
+            ctx.fillRect(0, 0, canvas.width, canvas.height * 0.55);
+            ctx.fillStyle = '#90EE90';
+            ctx.fillRect(0, canvas.height * 0.55, canvas.width, canvas.height * 0.45);
+
+            ctx.save();
+            ctx.translate(-gameState.cameraX, 0);
+
+            // Plataformas
+            ctx.fillStyle = '#8B4513';
+            for (let platform of platforms) {
+                ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+                ctx.fillStyle = '#654321';
+                for (let i = 0; i < platform.width; i += 20) {
+                    ctx.fillRect(platform.x + i, platform.y, 10, 5);
+                }
+                ctx.fillStyle = '#8B4513';
+            }
+
+            // Bandera
+            ctx.fillStyle = '#FF0000';
+            ctx.fillRect(flag.x - 3, flag.y - 40, 6, 50);
+            ctx.fillRect(flag.x, flag.y - 35, 35, 25);
+
+            // Monedas
+            ctx.fillStyle = '#FFD700';
+            for (let coin of coins) {
+                ctx.beginPath();
+                ctx.arc(coin.x, coin.y, 8, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#FFA500';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+
+            // Mario
+            ctx.fillStyle = mario.color;
+            ctx.fillRect(mario.x, mario.y, mario.width, mario.height);
+            ctx.fillStyle = '#FFDBAC';
+            ctx.fillRect(mario.x + 2, mario.y - 8, mario.width - 4, 10);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(mario.x + (mario.direction > 0 ? 6 : 12), mario.y - 6, 3, 3);
+
+            // Enemigos
+            for (let enemy of enemies) {
+                if (enemy.type === 'goomba') {
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+                    ctx.fillStyle = '#fff';
+                    ctx.fillRect(enemy.x + 5, enemy.y + 5, 6, 6);
+                    ctx.fillRect(enemy.x + 18, enemy.y + 5, 6, 6);
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(enemy.x + 7, enemy.y + 7, 2, 2);
+                    ctx.fillRect(enemy.x + 20, enemy.y + 7, 2, 2);
+                } else if (enemy.type === 'koopa') {
+                    ctx.fillStyle = '#00aa00';
+                    ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+                    ctx.fillStyle = '#00ff00';
+                    ctx.fillRect(enemy.x + 2, enemy.y + 2, enemy.width - 4, 12);
+                    ctx.fillStyle = '#fff';
+                    ctx.fillRect(enemy.x + 3, enemy.y + 8, 4, 4);
+                    ctx.fillRect(enemy.x + enemy.width - 7, enemy.y + 8, 4, 4);
+                }
+            }
+
+            ctx.restore();
+
+            // Mostrar Game Over
+            if (gameState.gameOver) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#ff0000';
+                ctx.font = 'bold 48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 40);
+                ctx.fillStyle = '#ffff00';
+                ctx.font = '24px Arial';
+                ctx.fillText(`Puntuación Final: ${gameState.score}`, canvas.width / 2, canvas.height / 2 + 20);
+                ctx.fillStyle = '#00ff00';
+                ctx.fillText('Haz clic para jugar de nuevo', canvas.width / 2, canvas.height / 2 + 70);
+            }
+
+            // Mostrar Nivel Completado
+            if (gameState.levelComplete) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#00ff00';
+                ctx.font = 'bold 48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('¡NIVEL COMPLETADO!', canvas.width / 2, canvas.height / 2 - 40);
+                ctx.fillStyle = '#ffff00';
+                ctx.font = '24px Arial';
+                ctx.fillText(`Puntuación: ${gameState.score}`, canvas.width / 2, canvas.height / 2 + 20);
+                ctx.fillStyle = '#00ffff';
+                ctx.fillText('Haz clic para continuar', canvas.width / 2, canvas.height / 2 + 70);
+            }
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function resetGame() {
+            gameState = { score: 0, coins: 0, lives: 3, gameOver: false, levelComplete: false, level: 1, cameraX: 0 };
+            mario = { x: 50, y: 350, width: 20, height: 32, velocityY: 0, velocityX: 0, jumping: false, direction: 1, color: '#ff0000' };
+            generateLevel(1);
+            scoreDisplay.textContent = '0';
+            coinsDisplay.textContent = '0';
+            livesDisplay.textContent = '3';
+            levelDisplay.textContent = '1';
+        }
+
+        // --- Control del teclado ---
+        document.addEventListener('keydown', (e) => {
+            const keysToBlock = [' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+            if (keysToBlock.includes(e.key)) e.preventDefault(); // bloquea scroll
+
+            keys[e.key] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+
+        // --- Reinicio con clic ---
+        canvas.addEventListener('click', () => {
+            if (gameState.gameOver || gameState.levelComplete) {
+                resetGame();
+            }
+        });
+
+
+        resetBtn.addEventListener('click', resetGame);
+
+        generateLevel(1);
+        gameLoop();
+    </script>
+</body>
+
+</html>
